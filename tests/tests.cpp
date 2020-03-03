@@ -55,9 +55,9 @@ template<typename T> struct accept_int <T, sink_t<decltype( T() | 10 )>> : std::
 
 TEST_CASE("testing bitflags")
 {
-    auto f = bitflags<Test::Flags>{};
-    //auto f2 = bitflags<Test::Flags3_bad>{};
-    //auto f3 = bitflags<int>{};
+    auto f = bitflags<Test::Flags>();
+    //auto f2 = bitflags<Test::Flags3_bad>();
+    //auto f3 = bitflags<int>();
 
     REQUIRE("000" == f.to_string());
 
@@ -178,9 +178,9 @@ TEST_CASE("testing bitflags")
     }
 
     SUBCASE("testing eq") {
-        auto f2 = bitflags<Test::Flags>{ Test::Flags::kFlagA };
-        CHECK(f == bitflags<Test::Flags>{});
-        CHECK_FALSE(f != bitflags<Test::Flags>{});
+        auto f2 = bitflags<Test::Flags>(Test::Flags::kFlagA);
+        CHECK(f == bitflags<Test::Flags>());
+        CHECK_FALSE(f != bitflags<Test::Flags>());
         CHECK(f2 == f.set(Test::Flags::kFlagA));
         CHECK_FALSE(f2 == f.set(Test::Flags::kFlagB));
     }

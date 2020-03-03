@@ -58,19 +58,19 @@ public:
 
     bitflags& operator |=(const bitflags& other)        { flags_ |= other.flags_; return *this; }
 
-    bitflags& operator &=(const ENUMERATION flag)       { return *this &= bitflags{ flag }; }
+    bitflags& operator &=(const ENUMERATION flag)       { return *this &= bitflags(flag); }
 
     bitflags& operator &=(const bitflags& other)        { flags_ &= other.flags_; return *this; }
 
-    bitflags operator |(const ENUMERATION flag) const   { return bitflags{ *this } |= flag; }
+    bitflags operator |(const ENUMERATION flag) const   { return bitflags(*this) |= flag; }
 
-    bitflags operator |(const bitflags& other) const    { return bitflags{ *this } |= other; }
+    bitflags operator |(const bitflags& other) const    { return bitflags(*this) |= other; }
 
-    bitflags operator &(const ENUMERATION flag) const   { return bitflags{ *this } &= flag; }
+    bitflags operator &(const ENUMERATION flag) const   { return bitflags(*this) &= flag; }
 
-    bitflags operator &(const bitflags& other) const    { return bitflags{ *this } &= other; }
+    bitflags operator &(const bitflags& other) const    { return bitflags(*this) &= other; }
 
-    bitflags operator ~() const                         { return bitflags{ *this }.flip(); }
+    bitflags operator ~() const                         { return bitflags(*this).flip(); }
 
     bool operator ==(const bitflags& other) const       { return flags_ == other.flags_ ; }
 
@@ -128,21 +128,21 @@ private:
 template<typename ENUMERATION>
 bf::bitflags<ENUMERATION> operator |(const ENUMERATION left, const ENUMERATION right)
 {
-    return bf::bitflags<ENUMERATION>{left} | right;
+    return bf::bitflags<ENUMERATION>(left) | right;
 }
 
 
 template<typename ENUMERATION>
 bf::bitflags<ENUMERATION> operator &(const ENUMERATION left, const ENUMERATION right)
 {
-    return bf::bitflags<ENUMERATION>{left} & right;
+    return bf::bitflags<ENUMERATION>(left) & right;
 }
 
 
 template<typename ENUMERATION>
 bf::bitflags<ENUMERATION> operator ~(const ENUMERATION flag)
 {
-    return ~ bf::bitflags<ENUMERATION>{flag};
+    return ~ bf::bitflags<ENUMERATION>(flag);
 }
 
 
