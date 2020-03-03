@@ -40,6 +40,8 @@ public:
 
     bitflags& flip(const ENUMERATION flag)              { flags_.flip(static_cast<std::size_t>(flag)); return *this; }
 
+    constexpr bool operator [](const ENUMERATION flag) const { return flags_[static_cast<std::size_t>(flag)]; }
+
     bitflags& operator |=(const ENUMERATION flag)       { return set(flag); }
 
     bitflags& operator |=(const bitflags& other)        { flags_ |= other.flags_; return *this; }

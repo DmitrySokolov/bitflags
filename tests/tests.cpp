@@ -96,6 +96,12 @@ TEST_CASE("testing bitflags")
         CHECK("011" == f.flip(Test::Flags::kFlagC).to_string());
     }
 
+    SUBCASE("testing f[ENUMERATION]") {
+        CHECK_FALSE(f[Test::Flags::kFlagA]);
+        CHECK(f.set(Test::Flags::kFlagA)[Test::Flags::kFlagA]);
+        CHECK_FALSE(f[Test::Flags::kFlagB]);
+    }
+
     SUBCASE("testing f |= ENUMERATION") {
         CHECK("100" == (f |= Test::Flags::kFlagC).to_string());
         CHECK("101" == (f |= Test::Flags::kFlagA).to_string());
