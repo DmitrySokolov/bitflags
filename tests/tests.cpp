@@ -33,6 +33,8 @@ using bf::operator~;
 }  // namespace Test
 
 
+using bf::bitflags;
+
 template<class T> struct sink { typedef void type; };
 template<class T> using sink_t = typename sink<T>::type;
 
@@ -43,14 +45,14 @@ template<typename T, typename = void> struct accept_int : std::false_type {};
 template<typename T> struct accept_int <T, sink_t<decltype(T() | 10)>> : std::true_type {};
 
 
-TEST_CASE("testing bf::BitFlags")
+TEST_CASE("testing bitflags")
 {
-    auto f = bf::BitFlags<Test::Flags>{};
+    auto f = bitflags<Test::Flags>{};
 
     REQUIRE("000" == f.to_string());
 
     SUBCASE("testing constr(ENUMERATION)") {
-        CHECK("001" == bf::BitFlags<Test::Flags>(Test::Flags::kFlagA).to_string());
+        CHECK("001" == bitflags<Test::Flags>(Test::Flags::kFlagA).to_string());
     }
 
     SUBCASE("testing set()") {
@@ -99,8 +101,8 @@ TEST_CASE("testing bf::BitFlags")
         CHECK("101" == (f |= Test::Flags::kFlagA).to_string());
     }
 
-    SUBCASE("testing f |= BitFlags") {
-        CHECK("010" == (f |= bf::BitFlags<Test::Flags>(Test::Flags::kFlagB)).to_string());
+    SUBCASE("testing f |= bitflags") {
+        CHECK("010" == (f |= bitflags<Test::Flags>(Test::Flags::kFlagB)).to_string());
     }
 
     SUBCASE("testing f | ENUMERATION") {
@@ -117,8 +119,8 @@ TEST_CASE("testing bf::BitFlags")
         CHECK("001" == (f.set() &= Test::Flags::kFlagA).to_string());
     }
 
-    SUBCASE("testing f &= BitFlags") {
-        CHECK("010" == (f.set() &= bf::BitFlags<Test::Flags>(Test::Flags::kFlagB)).to_string());
+    SUBCASE("testing f &= bitflags") {
+        CHECK("010" == (f.set() &= bitflags<Test::Flags>(Test::Flags::kFlagB)).to_string());
     }
 
     SUBCASE("testing f & ENUMERATION") {
@@ -154,15 +156,15 @@ TEST_CASE("testing bf::BitFlags")
     }
 
     SUBCASE("testing compile-time type checks") {
-        CHECK(accept_Flags<bf::BitFlags<Test::Flags>>::value);
-        CHECK_FALSE(accept_Flags<bf::BitFlags<Test::Flags2>>::value);
-        CHECK_FALSE(accept_int<bf::BitFlags<Test::Flags>>::value);
+        CHECK(accept_Flags<bitflags<Test::Flags>>::value);
+        CHECK_FALSE(accept_Flags<bitflags<Test::Flags2>>::value);
+        CHECK_FALSE(accept_int<bitflags<Test::Flags>>::value);
     }
 
     SUBCASE("testing eq") {
-        auto f2 = bf::BitFlags<Test::Flags>{ Test::Flags::kFlagA };
-        CHECK(f == bf::BitFlags<Test::Flags>{});
-        CHECK_FALSE(f != bf::BitFlags<Test::Flags>{});
+        auto f2 = bitflags<Test::Flags>{ Test::Flags::kFlagA };
+        CHECK(f == bitflags<Test::Flags>{});
+        CHECK_FALSE(f != bitflags<Test::Flags>{});
         CHECK(f2 == f.set(Test::Flags::kFlagA));
         CHECK_FALSE(f2 == f.set(Test::Flags::kFlagB));
     }
