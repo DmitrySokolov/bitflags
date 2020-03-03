@@ -1,21 +1,33 @@
 #ifndef BITFLAGS__337779E0_704E_483E_AC2D_49623E8191DB
 #define BITFLAGS__337779E0_704E_483E_AC2D_49623E8191DB
 
+#include <type_traits>
 #include <bitset>
 
 
 namespace bf {
 
 
+namespace detail {
+
 template<typename ENUMERATION>
-constexpr std::size_t bits_count(const ENUMERATION kLastElement_)
-{
-    return static_cast<std::size_t>(kLastElement_);
-}
+constexpr std::size_t bits_count(const ENUMERATION kLastElement_) { return static_cast<std::size_t>(kLastElement_); }
+
+template<class T> struct sink { typedef void type; };
+template<class T> using sink_t = typename sink<T>::type;
+
+template<typename T, typename = void> struct has_kLastElement : std::false_type {};
+template<typename T> struct has_kLastElement <T, sink_t<decltype( T::kLastElement_ )>> : std::true_type {};
+
+}  // namespace detail
 
 
 template<typename ENUMERATION>
 class bitflags {
+
+    static_assert(std::is_enum<ENUMERATION>::value, "ENUMERATION must be of 'enum class' type");
+    static_assert(detail::has_kLastElement<ENUMERATION>::value, "ENUMERATION must have 'kLastElement_' value");
+
 public:
     bitflags() = default;
     bitflags(const bitflags&) = default;
@@ -109,7 +121,7 @@ public:
     std::string to_string() const                       { return flags_.to_string(); }
 
 private:
-    std::bitset<bits_count(ENUMERATION::kLastElement_)> flags_;
+    std::bitset<detail::bits_count(ENUMERATION::kLastElement_)> flags_;
 };  // class bitflags
 
 

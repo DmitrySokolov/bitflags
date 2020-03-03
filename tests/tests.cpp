@@ -25,6 +25,13 @@ enum class Flags2 {
 };  // enum class Flags2
 
 
+enum class Flags3_bad {
+    kFlagK,
+    kFlagL,
+    kFlagM,
+};  // enum class Flags3_bad
+
+
 using bf::operator|;
 using bf::operator&;
 using bf::operator~;
@@ -35,6 +42,7 @@ using bf::operator~;
 
 using bf::bitflags;
 
+
 template<class T> struct sink { typedef void type; };
 template<class T> using sink_t = typename sink<T>::type;
 
@@ -42,12 +50,14 @@ template<typename T, typename = void> struct accept_Flags : std::false_type {};
 template<typename T> struct accept_Flags <T, sink_t<decltype( T() | Test::Flags::kFlagA )>> : std::true_type {};
 
 template<typename T, typename = void> struct accept_int : std::false_type {};
-template<typename T> struct accept_int <T, sink_t<decltype(T() | 10)>> : std::true_type {};
+template<typename T> struct accept_int <T, sink_t<decltype( T() | 10 )>> : std::true_type {};
 
 
 TEST_CASE("testing bitflags")
 {
     auto f = bitflags<Test::Flags>{};
+    //auto f2 = bitflags<Test::Flags3_bad>{};
+    //auto f3 = bitflags<int>{};
 
     REQUIRE("000" == f.to_string());
 
