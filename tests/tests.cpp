@@ -153,15 +153,18 @@ TEST_CASE("testing bf::BitFlags")
         CHECK("111" == (f |= ~ Test::Flags::kFlagB).to_string());
     }
 
-    SUBCASE("testing compile-time type cheks") {
+    SUBCASE("testing compile-time type checks") {
         CHECK(accept_Flags<bf::BitFlags<Test::Flags>>::value);
         CHECK_FALSE(accept_Flags<bf::BitFlags<Test::Flags2>>::value);
         CHECK_FALSE(accept_int<bf::BitFlags<Test::Flags>>::value);
     }
 
     SUBCASE("testing eq") {
+        auto f2 = bf::BitFlags<Test::Flags>{ Test::Flags::kFlagA };
         CHECK(f == bf::BitFlags<Test::Flags>{});
         CHECK_FALSE(f != bf::BitFlags<Test::Flags>{});
+        CHECK(f2 == f.set(Test::Flags::kFlagA));
+        CHECK_FALSE(f2 == f.set(Test::Flags::kFlagB));
     }
 
     SUBCASE("testing bits") {
